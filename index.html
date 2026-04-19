@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dark Matter Activation & The Cosmic Relay Hypothesis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --void: #04050a;
+      --deep: #080c1a;
+      --mid: #0d1428;
+      --panel: #101830;
+      --border: rgba(120, 160, 255, 0.12);
+      --star: #e8eeff;
+      --dim: #8090b8;
+      --accent: #4a7fff;
+      --gold: #c8a96e;
+      --glow: rgba(74, 127, 255, 0.15);
+      --solar: #ffb347;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--star);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── STAR FIELD ── */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(74,127,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dim);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.7s forwards;
+    }
+
+    .hero-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+
+    .hero-meta span {
+      border: 1px solid var(--border);
+      padding: 0.4em 1em;
+      border-radius: 2px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+
+    .scroll-hint span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s 1.5s infinite;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .part-header {
+      text-align: center;
+      padding: 6rem 2rem 3rem;
+    }
+
+    .part-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .part-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--star);
+    }
+
+    /* ── ZONES ── */
+    .zone {
+      max-width: 1100px;
+      margin: 0 auto 5rem;
+      padding: 0 2rem;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .zone.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .zone-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .zone-id {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .zone-title {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .dual-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 700px) {
+      .dual-panel { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--panel);
+      padding: 2.5rem;
+    }
+
+    .panel-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .panel-voice .panel-label { color: var(--gold); }
+    .panel-science .panel-label { color: var(--accent); }
+
+    .panel p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(232, 238, 255, 0.82);
+    }
+
+    .panel-voice p { font-style: italic; font-size: 1.05rem; }
+
+    /* ── SYNTHESIS ── */
+    .synthesis {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .synthesis.visible { opacity: 1; transform: translateY(0); }
+
+    .synthesis-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    .synthesis h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 3rem;
+      color: var(--gold);
+    }
+
+    .sequence-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      text-align: left;
+      position: relative;
+    }
+
+    .sequence-block::before {
+      content: 'THE SEQUENCE';
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+    }
+
+    .sequence-text {
+      font-size: 0.95rem;
+      line-height: 2.2;
+      color: rgba(232,238,255,0.85);
+      padding-top: 1rem;
+    }
+
+    .sequence-arrow {
+      color: var(--accent);
+      margin: 0 0.3em;
+      opacity: 0.6;
+    }
+
+    .meaning-block, .question-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 3rem;
+      margin-bottom: 2rem;
+      text-align: left;
+      position: relative;
+    }
+
+    .meaning-block::before {
+      content: 'WHAT THIS MEANS';
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+    }
+
+    .question-block::before {
+      content: 'THE HARD QUESTION';
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+    }
+
+    .meaning-block p, .question-block p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(232,238,255,0.82);
+      padding-top: 0.5rem;
+    }
+
+    .meaning-block p { font-style: italic; font-size: 1.05rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      margin: 0 auto 0;
+      opacity: 0.4;
+    }
+
+    /* ── ORBIT DIAGRAM ── */
+    .orbit-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      padding: 4rem 2rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .orbit-container.visible { opacity: 1; }
+
+    .orbit-svg {
+      width: min(500px, 90vw);
+      height: min(500px, 90vw);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes orbitSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { r: 4; opacity: 0.6; }
+      50% { r: 7; opacity: 1; }
+    }
+
+    @keyframes flowParticle {
+      0% { stroke-dashoffset: 1000; }
+      100% { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- HERO -->
+<header class="hero">
+  <p class="hero-eyebrow">A Visual Hypothesis · Mark J Azzopardi</p>
+  <h1 class="hero-title"><em>Dark Matter Activation</em></h1>
+  <p class="hero-subtitle">& The Cosmic Relay Hypothesis</p>
+  <div class="hero-meta">
+    <span>Hypothesis — Untested</span>
+    <span>Not Peer Reviewed</span>
+    <span>Visual Hypothesis Only</span>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<!-- OVERVIEW -->
+<section>
+  <div class="zone" style="max-width:800px; text-align:center; padding-top:2rem;">
+    <p style="font-size:1.15rem; line-height:1.9; color:rgba(232,238,255,0.75); font-style:italic;">
+      This document presents two interlocking hypotheses: that dark matter undergoes state change upon entering an active stellar field, and that the solar system functions as a staged, multi-epoch delivery system for evolutionary biological information — operating across both cosmic space and cosmic time.
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORBIT DIAGRAM -->
+<div class="orbit-container" id="orbit">
+  <svg class="orbit-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background glow -->
+    <circle cx="250" cy="250" r="220" fill="url(#bgGlow)" opacity="0.3"/>
+    <!-- Heliosphere boundary -->
+    <circle cx="250" cy="250" r="210" stroke="rgba(74,127,255,0.25)" stroke-width="1" stroke-dasharray="4 6"/>
+    <!-- Outer orbit (Gas giants) -->
+    <g style="transform-origin:250px 250px; animation: orbitSpin 40s linear infinite;">
+      <circle cx="250" cy="250" r="150" stroke="rgba(120,160,255,0.15)" stroke-width="1"/>
+      <!-- Jupiter -->
+      <circle cx="400" cy="250" r="12" fill="#c8a96e" opacity="0.8"/>
+      <circle cx="400" cy="250" r="18" fill="none" stroke="rgba(200,169,110,0.3)" stroke-width="1"/>
+    </g>
+    <!-- Inner orbit -->
+    <g style="transform-origin:250px 250px; animation: orbitSpin 18s linear infinite;">
+      <circle cx="250" cy="250" r="85" stroke="rgba(120,160,255,0.15)" stroke-width="1"/>
+      <!-- Earth -->
+      <circle cx="335" cy="250" r="7" fill="#4a7fff" opacity="0.9"/>
+    </g>
+    <!-- Sun -->
+    <circle cx="250" cy="250" r="28" fill="url(#sunGrad)"/>
+    <circle cx="250" cy="250" r="36" fill="none" stroke="#ffb347" stroke-width="1" opacity="0.4"/>
+    <circle cx="250" cy="250" r="44" fill="none" stroke="#ffb347" stroke-width="0.5" opacity="0.2"/>
+    <!-- Dark matter particles flowing inward -->
+    <g opacity="0.5">
+      <circle cx="50" cy="120" r="2" fill="#4a7fff" style="animation: pulseDot 3s 0s infinite;"/>
+      <circle cx="460" cy="80" r="2" fill="#4a7fff" style="animation: pulseDot 3s 0.7s infinite;"/>
+      <circle cx="30" cy="350" r="2" fill="#4a7fff" style="animation: pulseDot 3s 1.4s infinite;"/>
+      <circle cx="470" cy="390" r="2" fill="#4a7fff" style="animation: pulseDot 3s 2.1s infinite;"/>
+      <circle cx="250" cy="20" r="2" fill="#4a7fff" style="animation: pulseDot 3s 0.35s infinite;"/>
+      <circle cx="250" cy="475" r="2" fill="#4a7fff" style="animation: pulseDot 3s 1.75s infinite;"/>
+    </g>
+    <!-- Labels -->
+    <text x="250" y="255" text-anchor="middle" fill="#ffb347" font-family="Space Mono, monospace" font-size="9" letter-spacing="1">SOL</text>
+    <text x="408" y="237" fill="rgba(200,169,110,0.8)" font-family="Space Mono, monospace" font-size="7">JUP</text>
+    <text x="340" y="237" fill="rgba(74,127,255,0.8)" font-family="Space Mono, monospace" font-size="7">EARTH</text>
+    <text x="140" y="50" fill="rgba(74,127,255,0.5)" font-family="Space Mono, monospace" font-size="7" letter-spacing="1">DARK MATTER →</text>
+    <text x="135" y="462" fill="rgba(74,127,255,0.5)" font-family="Space Mono, monospace" font-size="7" letter-spacing="1">HELIOPAUSE</text>
+    <defs>
+      <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff5d0"/>
+        <stop offset="60%" stop-color="#ffb347"/>
+        <stop offset="100%" stop-color="#ff7a00" stop-opacity="0.8"/>
+      </radialGradient>
+      <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#4a7fff"/>
+        <stop offset="100%" stop-color="#04050a" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+  </svg>
+</div>
+
+<!-- PART ONE -->
+<section>
+  <div class="part-header">
+    <span class="part-label">Part One</span>
+    <h2 class="part-title">Dark Matter Activation Hypothesis</h2>
+  </div>
+
+  <div class="zone" id="z01">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 01</span>
+      <h3 class="zone-title">Inert Dark Matter</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>Dark matter floats everywhere in the universe — invisible, passing through all matter without interaction. Inert and undetected. The universe is full of something we cannot see and cannot feel. Not yet.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>Current models describe dark matter as non-interacting with electromagnetic radiation. It passes through ordinary matter at all scales without measurable effect. Its distribution is inferred only through gravitational lensing and galactic rotation curves.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="zone" id="z02">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 02</span>
+      <h3 class="zone-title">The Heliosphere Boundary</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>The heliosphere is where our Sun draws the line — the edge of its breath, its magnetic reach. A bubble 100 AU across. Everything inside is ours. Everything outside is something else.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>The heliosphere is the region of space dominated by the Sun's solar wind and magnetic field. It extends approximately 100 AU and terminates at the heliopause, where solar wind pressure equals interstellar medium pressure. It represents a genuine electromagnetic boundary condition.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="zone" id="z03">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 03</span>
+      <h3 class="zone-title">Activated Dark Matter</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>Here is the hypothesis: dark matter crossing the heliosphere boundary is activated by UV radiation and solar wind. It changes state. It picks something up. It begins carrying evolutionary data toward life.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>Proposed mechanism: dark matter particles entering the solar electromagnetic field undergo vibrational excitation. UV radiation activates those vibrations. Solar wind plasma distributes activated particles throughout the inner solar system, where they interact with biological systems at the molecular level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PART TWO -->
+<section>
+  <div class="part-header">
+    <span class="part-label">Part Two</span>
+    <h2 class="part-title">The Cosmic Relay Hypothesis</h2>
+  </div>
+
+  <div class="zone" id="z04">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 04</span>
+      <h3 class="zone-title">The Solar Lifecycle as Evolutionary Clock</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>The Sun is not static. It has stages. Right now it is in one stage — and the dark matter it activates carries one kind of signal. When it expands, it will reach the gas giants. They will absorb its molecules, change their composition, and the light and UV they emit back into the system will change. A new signal. A new chapter.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>The Sun's main sequence lifecycle spans approximately 10 billion years. During red giant expansion, significant mass transfer to outer bodies including gas giants is physically plausible. A change in Jupiter or Saturn's atmospheric composition would alter their electromagnetic emission profiles — potentially changing the character of the solar field's interaction with dark matter.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="zone" id="z05">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 05</span>
+      <h3 class="zone-title">Gas Giants as Field Modulators</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>Jupiter and Saturn are not just big rocks. They are transformers. They step down the signal. They filter what reaches us. Evolution cannot happen all at once — different stages, different DNA, different information delivered at different times. The outer planets are the pacing mechanism.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>Jupiter's magnetosphere is the largest structure in the solar system, extending up to 7 million km sunward. It actively modulates charged particle flow. The hypothesis proposes this modulation extends to activated dark matter distribution — functioning as a staged delivery system, ensuring biological systems receive evolutionary information incrementally rather than as an overwhelming simultaneous broadcast.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="zone" id="z06">
+    <div class="zone-header">
+      <span class="zone-id">ZONE 06</span>
+      <h3 class="zone-title">The Civilisational Timescale</h3>
+    </div>
+    <div class="dual-panel">
+      <div class="panel panel-voice">
+        <span class="panel-label">Personal Voice</span>
+        <p>We will not be here on Earth when the Sun expands. By then, we will have spread across the stars. We will be observing from other planets, inside other stellar fields, receiving different evolutionary signals from different suns at different stages. The journey is not escape. It is graduation.</p>
+      </div>
+      <div class="panel panel-science">
+        <span class="panel-label">Hypothesis Framing</span>
+        <p>On a civilisational timescale of billions of years, the hypothesis predicts: humanity disperses across multiple stellar systems; each system's stellar lifecycle stage generates a unique dark matter activation signature; biological evolution continues in differentiated directions across stellar populations; the universe functions as a distributed evolutionary curriculum with each star system as a distinct instructional environment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYNTHESIS -->
+<section>
+  <div class="synthesis" id="synthesis">
+    <span class="synthesis-label">Synthesis</span>
+    <h2>The Full Arc</h2>
+
+    <div class="sequence-block">
+      <p class="sequence-text">
+        Sun activates dark matter at the heliosphere boundary
+        <span class="sequence-arrow">→</span>
+        gas giants modulate and stage the signal
+        <span class="sequence-arrow">→</span>
+        inner planets receive filtered, epoch-appropriate evolutionary information
+        <span class="sequence-arrow">→</span>
+        life evolves incrementally, generation by generation
+        <span class="sequence-arrow">→</span>
+        humanity spreads across star systems
+        <span class="sequence-arrow">→</span>
+        each new stellar field delivers the next chapter of biological and conscious development
+        <span class="sequence-arrow">→</span>
+        the solar system's death becomes the universe's next transmission.
+      </p>
+    </div>
+
+    <div class="meaning-block">
+      <p>Evolution is not random. It is not purely competitive. It is a structured curriculum — written in solar radiation, carried by dark matter, paced by planetary architecture, and delivered across geological and cosmological time. The universe is not indifferent to life. It is its author.</p>
+    </div>
+
+    <div class="question-block">
+      <p>If activated dark matter carries evolutionary information — what encodes it? What determines the sequence of updates? What decides what comes next? That answer, if it exists, sits at the intersection of cosmology, biology, and something we do not yet have a name for.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Visual Hypothesis Only &nbsp;·&nbsp; Not Peer Reviewed &nbsp;·&nbsp; © Mark J Azzopardi</p>
+</footer>
+
+<script>
+  // ── STAR FIELD ──
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 280; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.2,
+        a: Math.random(),
+        speed: Math.random() * 0.002 + 0.001,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function drawStars(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const alpha = s.a * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 210, 255, ${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  initStars();
+  requestAnimationFrame(drawStars);
+  window.addEventListener('resize', () => { resize(); initStars(); });
+
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.zone, .synthesis, .orbit-container');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
