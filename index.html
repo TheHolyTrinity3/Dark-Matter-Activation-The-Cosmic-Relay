@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Matter Activation — Mark J Azzopardi</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #020408;
+  font-family: 'Rajdhani', sans-serif;
+  color: #d4c9b8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-weight: 300;
+  color: #f0ece4;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: #c9a84c;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.diagram-wrap {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6b7a8d;
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dash {
+  width: 24px; height: 2px;
+  flex-shrink: 0;
+}
+
+.notes {
+  max-width: 700px;
+  margin: 3rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.note-card {
+  padding: 1.5rem;
+  background: #050d18;
+  position: relative;
+}
+
+.note-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.note-card.dark::before { background: #555; }
+.note-card.boundary::before { background: #c9a84c; }
+.note-card.light::before { background: #ffe066; }
+
+.note-num {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: #c9a84c;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.note-title {
+  font-size: 1rem;
+  color: #f0ece4;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.note-text {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #6b7a8d;
+  font-weight: 300;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
+.hypothesis-note {
+  max-width: 700px;
+  margin: 2rem auto 0;
+  padding: 1.5rem 2rem;
+  border-left: 2px solid rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.03);
+}
+
+.hypothesis-note p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: #d4c9b8;
+}
+
+.hypothesis-note .label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: #c9a84c;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  display: block;
+  font-style: normal;
+}
+
+footer-note {
+  display: block;
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: #2d3a4a;
+  text-transform: uppercase;
+}
+
+@media(max-width:600px) {
+  .notes { grid-template-columns: 1fr; }
+  .legend { gap: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<h1>Dark Matter Activation Hypothesis</h1>
+<p class="subtitle">A Visual Hypothesis — Mark J Azzopardi</p>
+
+<div class="diagram-wrap">
+  <canvas id="diagram" width="900" height="600"></canvas>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#444"></div>
+    Dark Matter (inert)
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#ffe066"></div>
+    Dark Matter (activated)
+  </div>
+  <div class="legend-dash" style="background:#c9a84c"></div>
+  <div class="legend-item" style="margin-left:-1.5rem">Heliosphere Boundary</div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#ff9d2f;box-shadow:0 0 6px rgba(255,157,47,0.8)"></div>
+    Sun
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#4a9eff"></div>
+    Earth
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note-card dark">
+    <span class="note-num">Zone 01</span>
+    <div class="note-title">Inert Dark Matter</div>
+    <p class="note-text">Dark matter floats everywhere in the universe — invisible, passing through all matter without interaction. Inert and undetected.</p>
+  </div>
+  <div class="note-card boundary">
+    <span class="note-num">Zone 02</span>
+    <div class="note-title">The Heliosphere</div>
+    <p class="note-text">The boundary where the Sun's solar wind meets interstellar space. A magnetic bubble 100 AU across enclosing the entire solar system.</p>
+  </div>
+  <div class="note-card light">
+    <span class="note-num">Zone 03</span>
+    <div class="note-title">Activated Matter</div>
+    <p class="note-text">Hypothesis: dark matter crossing the heliosphere boundary is activated by UV radiation and solar wind, changing state and carrying evolutionary data toward life.</p>
+  </div>
+</div>
+
+<div class="hypothesis-note">
+  <span class="label">Hypothesis — Untested</span>
+  <p>Dark matter particles vibrate upon entering the solar field. UV radiation activates those vibrations. Solar wind spreads activated particles through the solar system, where they interact with biological DNA — delivering minute evolutionary updates, generation by generation.</p>
+</div>
+
+<footer-note>Visual Hypothesis Only · Not Peer Reviewed · © Mark J Azzopardi</footer-note>
+
+<script>
+const canvas = document.getElementById('diagram');
+const ctx = canvas.getContext('2d');
+const W = 900, H = 600;
+
+// Background
+ctx.fillStyle = '#020408';
+ctx.fillRect(0, 0, W, H);
+
+// Sun position
+const sunX = 680, sunY = H/2;
+const helioX = 320;
+
+// Starfield
+for(let i = 0; i < 120; i++) {
+  const x = Math.random() * W;
+  const y = Math.random() * H;
+  const r = Math.random() * 0.8;
+  const a = Math.random() * 0.4 + 0.1;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI*2);
+  ctx.fillStyle = `rgba(255,255,240,${a})`;
+  ctx.fill();
+}
+
+// Solar glow inside heliosphere
+const grd = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 380);
+grd.addColorStop(0, 'rgba(255,200,50,0.12)');
+grd.addColorStop(0.4, 'rgba(255,157,47,0.06)');
+grd.addColorStop(1, 'rgba(255,157,47,0)');
+ctx.fillStyle = grd;
+ctx.fillRect(0, 0, W, H);
+
+// UV radiation lines from sun
+ctx.save();
+for(let i = 0; i < 12; i++) {
+  const angle = (i / 12) * Math.PI * 2;
+  const len = 180 + Math.random() * 60;
+  ctx.beginPath();
+  ctx.moveTo(sunX, sunY);
+  ctx.lineTo(sunX + Math.cos(angle) * len, sunY + Math.sin(angle) * len);
+  ctx.strokeStyle = 'rgba(255,220,50,0.06)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+ctx.restore();
+
+// Dark matter particles — LEFT (inert, dark)
+for(let i = 0; i < 120; i++) {
+  const x = Math.random() * (helioX - 20);
+  const y = Math.random() * H;
+  const size = Math.random() * 2.5 + 0.5;
+  const shape = Math.random();
+  ctx.save();
+  ctx.translate(x, y);
+  if(shape > 0.6) {
+    // dash
+    ctx.rotate(Math.random() * Math.PI);
+    ctx.fillStyle = `rgba(80,80,90,${Math.random()*0.5+0.3})`;
+    ctx.fillRect(-size*2, -size*0.4, size*4, size*0.8);
+  } else {
+    // dot
+    ctx.beginPath();
+    ctx.arc(0, 0, size, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(60,65,75,${Math.random()*0.5+0.3})`;
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Dark matter particles — RIGHT (activated, yellow)
+for(let i = 0; i < 100; i++) {
+  const x = helioX + 20 + Math.random() * (W - helioX - sunX + 100);
+  const y = Math.random() * H;
+  const size = Math.random() * 2.5 + 0.5;
+  const shape = Math.random();
+  const brightness = Math.random() * 0.5 + 0.4;
+  ctx.save();
+  ctx.translate(x, y);
+  if(shape > 0.5) {
+    ctx.rotate(Math.random() * Math.PI);
+    ctx.fillStyle = `rgba(255,220,50,${brightness})`;
+    ctx.shadowColor = 'rgba(255,200,50,0.4)';
+    ctx.shadowBlur = 4;
+    ctx.fillRect(-size*2, -size*0.4, size*4, size*0.8);
+  } else {
+    ctx.beginPath();
+    ctx.arc(0, 0, size, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,210,40,${brightness})`;
+    ctx.shadowColor = 'rgba(255,200,50,0.5)';
+    ctx.shadowBlur = 5;
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Heliosphere boundary line
+ctx.save();
+ctx.beginPath();
+ctx.moveTo(helioX, 0);
+// Wavy line
+for(let y = 0; y <= H; y += 4) {
+  const wave = Math.sin(y * 0.025) * 8 + Math.sin(y * 0.05) * 4;
+  ctx.lineTo(helioX + wave, y);
+}
+ctx.strokeStyle = '#444';
+ctx.lineWidth = 2.5;
+ctx.stroke();
+
+// Golden glow on boundary
+ctx.beginPath();
+ctx.moveTo(helioX, 0);
+for(let y = 0; y <= H; y += 4) {
+  const wave = Math.sin(y * 0.025) * 8 + Math.sin(y * 0.05) * 4;
+  ctx.lineTo(helioX + wave, y);
+}
+ctx.strokeStyle = 'rgba(201,168,76,0.5)';
+ctx.lineWidth = 1;
+ctx.shadowColor = 'rgba(201,168,76,0.6)';
+ctx.shadowBlur = 8;
+ctx.stroke();
+ctx.restore();
+
+// Earth
+const earthX = 530, earthY = H/2 + 40;
+const earthGrd = ctx.createRadialGradient(earthX-5, earthY-5, 2, earthX, earthY, 18);
+earthGrd.addColorStop(0, '#6ec6ff');
+earthGrd.addColorStop(1, '#1a4a8a');
+ctx.beginPath();
+ctx.arc(earthX, earthY, 14, 0, Math.PI*2);
+ctx.fillStyle = earthGrd;
+ctx.shadowColor = 'rgba(74,158,255,0.5)';
+ctx.shadowBlur = 15;
+ctx.fill();
+ctx.shadowBlur = 0;
+
+// Earth label
+ctx.font = '500 11px Rajdhani';
+ctx.fillStyle = '#6b7a8d';
+ctx.letterSpacing = '0.2em';
+ctx.fillText('EARTH', earthX - 18, earthY + 28);
+
+// Sun
+const sunGrd = ctx.createRadialGradient(sunX-8, sunY-8, 4, sunX, sunY, 32);
+sunGrd.addColorStop(0, '#fff5cc');
+sunGrd.addColorStop(0.4, '#ffcc00');
+sunGrd.addColorStop(1, '#ff6b00');
+ctx.beginPath();
+ctx.arc(sunX, sunY, 28, 0, Math.PI*2);
+ctx.fillStyle = sunGrd;
+ctx.shadowColor = 'rgba(255,157,47,0.8)';
+ctx.shadowBlur = 40;
+ctx.fill();
+ctx.shadowBlur = 0;
+
+// Sun label
+ctx.font = '500 11px Rajdhani';
+ctx.fillStyle = '#6b7a8d';
+ctx.fillText('SUN', sunX - 10, sunY + 46);
+
+// Labels
+ctx.font = '500 10px Rajdhani';
+ctx.letterSpacing = '2px';
+
+// Left label
+ctx.fillStyle = 'rgba(80,90,100,0.8)';
+ctx.fillText('DARK MATTER', 20, 30);
+ctx.fillText('INERT', 20, 46);
+
+// Right label  
+ctx.fillStyle = 'rgba(201,168,76,0.7)';
+ctx.fillText('DARK MATTER', helioX + 20, 30);
+ctx.fillText('ACTIVATED', helioX + 20, 46);
+
+// Boundary label
+ctx.save();
+ctx.translate(helioX - 14, H/2);
+ctx.rotate(-Math.PI/2);
+ctx.font = '500 9px Rajdhani';
+ctx.fillStyle = 'rgba(201,168,76,0.6)';
+ctx.fillText('HELIOSPHERE BOUNDARY', -70, 0);
+ctx.restore();
+
+// Activation arrows at boundary
+for(let i = 0; i < 5; i++) {
+  const y = 80 + i * 110;
+  ctx.beginPath();
+  ctx.moveTo(helioX - 30, y);
+  ctx.lineTo(helioX + 30, y);
+  ctx.strokeStyle = 'rgba(201,168,76,0.3)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3,3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // Arrow head
+  ctx.beginPath();
+  ctx.moveTo(helioX + 30, y);
+  ctx.lineTo(helioX + 22, y - 4);
+  ctx.lineTo(helioX + 22, y + 4);
+  ctx.fillStyle = 'rgba(201,168,76,0.4)';
+  ctx.fill();
+}
+
+// UV label near sun
+ctx.font = '500 9px Rajdhani';
+ctx.fillStyle = 'rgba(255,200,50,0.5)';
+ctx.fillText('UV RADIATION', sunX - 65, sunY - 45);
+ctx.fillText('SOLAR WIND', sunX - 58, sunY + 55);
+</script>
+
+</body>
+</html>
